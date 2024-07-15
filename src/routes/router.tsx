@@ -8,6 +8,7 @@ import ProductsTable from "../components/ui/dashboard/ProductsTable";
 import AddProductForm from "../components/ui/dashboard/AddProductForm";
 import ProductsPage from "../pages/ProductsPage";
 import UpdateProductForm from "../components/ui/dashboard/UpadateProduct";
+import Payments from "../components/payments/Payments";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: "/cart",
     element: <CartPage />,
+  },
+  {
+    path: "/checkout",
+    element: <Payments />,
   },
   {
     path: "/dashboard",

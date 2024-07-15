@@ -15,6 +15,9 @@ export default function Navbar_two() {
         <Link to="/">Home</Link>
       </li>
       <li>
+        <Link to="/products">Products</Link>
+      </li>
+      <li>
         <Link to="/about-us">About</Link>
       </li>
       <li>

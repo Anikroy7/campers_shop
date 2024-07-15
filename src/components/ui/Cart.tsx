@@ -1,4 +1,5 @@
-import { addToRemoveFromCart } from "../../redux/features/cart/cartSlice";
+import { Link } from "react-router-dom";
+import { addToRemoveFromCart, removeProductFromCart } from "../../redux/features/cart/cartSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 
 export default function Cart() {
@@ -9,6 +10,10 @@ export default function Cart() {
     acc += curr.quantity;
     return acc;
   }, 0);
+  const totalPrice = cartItems.reduce((acc, curr) => {
+    acc += (curr.price * curr.quantity)
+    return acc
+  }, 0)
 
   const handleCartItems = (type, item) => {
     const payload = {
@@ -17,6 +22,7 @@ export default function Cart() {
     };
     dispatch(addToRemoveFromCart(payload));
   };
+  
 
   return (
     <>
@@ -45,13 +51,9 @@ export default function Cart() {
                 Total
               </h3>
             </div>
-            <div className="text-center mt-8">
-              <p className="text-lg font-semibold text-orange-500">
-                No items found
-              </p>
-            </div>
 
-            {cartItems.map((item) => (
+
+            {cartItems.length > 0 ? cartItems.map((item) => (
               <div className="flex flex-col md:flex-row items-center hover:bg-gray-100 -mx-4 px-6 py-5 shadow-sm my-3">
                 <div className="flex w-full md:w-2/5">
                   <div className="w-20 md:w-24">
@@ -64,14 +66,14 @@ export default function Cart() {
                     <span className="text-red-500 text-xs">
                       {item.category}
                     </span>
-                    <a className="font-semibold hover:cursor-pointer hover:text-red-500 text-gray-500 text-xs">
+                    <span onClick={() => dispatch(removeProductFromCart(item._id))} className="font-semibold hover:cursor-pointer hover:text-red-500 text-gray-500 text-xs">
                       Remove
-                    </a>
+                    </span>
                   </div>
                 </div>
                 <div className="flex md:justify-center w-full md:w-1/5 mt-3">
                   <svg
-                    onClick={() => handleCartItems("increment", item)}
+                    onClick={() => handleCartItems("decrement", item)}
                     className="fill-current text-gray-600 w-3 hover:text-orange-500 hover:cursor-pointer md:w-4"
                     viewBox="0 0 448 512"
                   >
@@ -86,7 +88,7 @@ export default function Cart() {
                     value={item.quantity}
                   />
                   <svg
-                    onClick={() => handleCartItems("decrement", item)}
+                    onClick={() => handleCartItems("increment", item)}
                     className="fill-current text-gray-600 w-3 hover:text-orange-500 hover:cursor-pointer md:w-4"
                     viewBox="0 0 448 512"
                   >
@@ -105,10 +107,14 @@ export default function Cart() {
                   </span>
                 </span>
               </div>
-            ))}
+            )) : <div className="text-center mt-8">
+              <p className="text-lg font-semibold text-orange-500">
+                No items found
+              </p>
+            </div>}
 
-            <a
-              href=""
+            <Link
+              to={"/products"}
               className="flex font-semibold text-indigo-600 text-sm mt-10"
             >
               <svg
@@ -118,7 +124,7 @@ export default function Cart() {
                 <path d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z" />
               </svg>
               Continue Shopping
-            </a>
+            </Link>
           </div>
           <div id="summary" className="w-full md:w-1/4 px-4 md:px-8 py-10">
             <h1 className="font-semibold text-xl md:text-2xl border-b pb-8">
@@ -126,11 +132,11 @@ export default function Cart() {
             </h1>
             <div className="flex justify-between mt-10 mb-5">
               <span className="font-semibold text-sm uppercase">
-                Items <span className="itemsQuantity">9000</span>
+                Items <span className="itemsQuantity">{cartItems.length}</span>
               </span>
               <span className="font-semibold text-sm total_price">
-                <span className="text-2xl font-bold">৳</span>
-                877
+                <span className="text-2xl font-bold">$</span>
+                {totalPrice}
               </span>
             </div>
             <div>
@@ -164,15 +170,15 @@ export default function Cart() {
               <div className="flex font-semibold justify-between py-6 text-sm uppercase">
                 <span>Total cost</span>
                 <span className="total_price">
-                  <span className="text-2xl font-bold">৳</span> 5000
+                  <span className="text-2xl font-bold">$</span> {totalPrice}
                 </span>
               </div>
-              <a
-                href="{{ route('checkout.index') }}"
+              <Link
+                to={"/checkout"}
                 className="bg-indigo-500 font-semibold hover:bg-indigo-600 p-3 text-sm text-white uppercase w-full"
               >
                 Checkout
-              </a>
+              </Link>
             </div>
           </div>
         </div>
