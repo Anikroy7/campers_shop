@@ -4,61 +4,45 @@ import {
     useStripe,
     useElements
 } from "@stripe/react-stripe-js";
+import toast from "react-hot-toast";
+import useGetOrderInfo from "../../hooks/useGetOrderInfo";
 
-export default function CheckoutForm() {
+export default function CheckoutForm({clientSecret, email, address, contactNo, name, setError }) {
     const stripe = useStripe();
     const elements = useElements();
 
     const [message, setMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        if (!stripe) {
-            return;
-        }
-
-        const clientSecret = new URLSearchParams(window.location.search).get(
-            "payment_intent_client_secret"
-        );
-
-        if (!clientSecret) {
-            return;
-        }
-
-        stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-            switch (paymentIntent.status) {
-                case "succeeded":
-                    setMessage("Payment succeeded!");
-                    break;
-                case "processing":
-                    setMessage("Your payment is processing.");
-                    break;
-                case "requires_payment_method":
-                    setMessage("Your payment was not successful, please try again.");
-                    break;
-                default:
-                    setMessage("Something went wrong.");
-                    break;
-            }
-        });
-    }, [stripe]);
+    const userInfo ={name, email, address, contactNo}
+    const orderData= useGetOrderInfo(userInfo, clientSecret)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        console.log(orderData)
+        if (!email || !address || !contactNo || !name) {
+            setError(true)
+            toast.error("All fields are required!!!")
+            return
+        }
+        setError(false)
         if (!stripe || !elements) {
-            // Stripe.js hasn't yet loaded.
-            // Make sure to disable form submission until Stripe.js has loaded.
             return;
         }
-
+        
         setIsLoading(true);
+        fetch('http://localhost:3000/api/orders', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ...orderData }),
+        }).then((res) => res.json()).then(data => console.log('this is after order', data))
 
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
                 // Make sure to change this to your payment completion page
-                return_url: "http://localhost:3000",
+                return_url: "http://localhost:5173/products",
             },
         });
 
@@ -68,11 +52,12 @@ export default function CheckoutForm() {
         // be redirected to an intermediate site first to authorize the payment, then
         // redirected to the `return_url`.
         if (error.type === "card_error" || error.type === "validation_error") {
-            setMessage(error.message);
+            toast.error(error.message);
         } else {
             setMessage("An unexpected error occurred.");
         }
-
+     
+        
         setIsLoading(false);
     };
 

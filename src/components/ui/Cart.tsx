@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hook";
 export default function Cart() {
   const { cartItems } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
-
+  
   const totalItems = cartItems.reduce((acc, curr) => {
     acc += curr.quantity;
     return acc;
@@ -21,8 +21,9 @@ export default function Cart() {
       data: item,
     };
     dispatch(addToRemoveFromCart(payload));
+    console.log(cartItems)
   };
-  
+
 
   return (
     <>
