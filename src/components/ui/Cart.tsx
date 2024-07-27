@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import { addToRemoveFromCart, removeProductFromCart } from "../../redux/features/cart/cartSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import usePageUnloadWarning from "../../hooks/usePageUnloadWarning";
 
 export default function Cart() {
   const { cartItems } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
-  
+  console.log('console form cart page',cartItems)
   const totalItems = cartItems.reduce((acc, curr) => {
     acc += curr.quantity;
     return acc;
@@ -23,6 +24,12 @@ export default function Cart() {
     dispatch(addToRemoveFromCart(payload));
     console.log(cartItems)
   };
+  const removeProduct =(productId)=>{
+    console.log('come')
+    dispatch(removeProdvuctFromCart(productId))
+  }
+  usePageUnloadWarning(cartItems.length > 0);
+
 
 
   return (
@@ -67,7 +74,7 @@ export default function Cart() {
                     <span className="text-red-500 text-xs">
                       {item.category}
                     </span>
-                    <span onClick={() => dispatch(removeProductFromCart(item._id))} className="font-semibold hover:cursor-pointer hover:text-red-500 text-gray-500 text-xs">
+                    <span onClick={() => removeProduct(item._id)} className="font-semibold hover:cursor-pointer hover:text-red-500 text-gray-500 text-xs">
                       Remove
                     </span>
                   </div>

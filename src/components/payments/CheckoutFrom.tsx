@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     PaymentElement,
     useStripe,
@@ -6,75 +6,80 @@ import {
 } from "@stripe/react-stripe-js";
 import toast from "react-hot-toast";
 import useGetOrderInfo from "../../hooks/useGetOrderInfo";
+import { useAppSelector } from "../../redux/hook";
+import { useNavigate } from "react-router-dom";
 
-export default function CheckoutForm({clientSecret, email, address, contactNo, name, setError }) {
+export default function CheckoutForm({ clientSecret, email, address, contactNo, name, setError }) {
     const stripe = useStripe();
     const elements = useElements();
-
+    const navigate = useNavigate()
+    const cartItems = useAppSelector(state => state.cart.cartItems);
     const [message, setMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const userInfo ={name, email, address, contactNo}
-    const orderData= useGetOrderInfo(userInfo, clientSecret)
+    const userInfo = { name, email, address, contactNo };
+    const orderData = useGetOrderInfo(userInfo, clientSecret, cartItems);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(orderData)
-        if (!email || !address || !contactNo || !name) {
-            setError(true)
-            toast.error("All fields are required!!!")
-            return
-        }
-        setError(false)
         if (!stripe || !elements) {
             return;
         }
-        
-        setIsLoading(true);
-        fetch('http://localhost:3000/api/orders', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ ...orderData }),
-        }).then((res) => res.json()).then(data => console.log('this is after order', data))
+        if (!email || !address || !contactNo || !name) {
+            setError(true);
+            toast.error("All fields are required!!!");
+            return;
+        }
 
-        const { error } = await stripe.confirmPayment({
+        setIsLoading(true);
+
+        const { error, paymentIntent } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                // Make sure to change this to your payment completion page
-                return_url: "http://localhost:5173/products",
+                payment_method_data: {
+                    billing_details: {
+                        name: name,
+                        email: email,
+                    },
+                },
             },
+            redirect: "if_required",
         });
 
-        // This point will only be reached if there is an immediate error when
-        // confirming the payment. Otherwise, your customer will be redirected to
-        // your `return_url`. For some payment methods like iDEAL, your customer will
-        // be redirected to an intermediate site first to authorize the payment, then
-        // redirected to the `return_url`.
-        if (error.type === "card_error" || error.type === "validation_error") {
+        if (error) {
+            setMessage(error.message);
+            setError(true);
             toast.error(error.message);
-        } else {
-            setMessage("An unexpected error occurred.");
+        } else if (paymentIntent && paymentIntent.status === "succeeded") {
+            console.log(paymentIntent)
+            fetch('http://localhost:3000/api/orders', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ ...orderData, paymentIntent:paymentIntent.id, paymentMethod: paymentIntent.payment_method  }),
+            }).then((res) => res.json()).then(data => {
+                console.log(data)
+                toast.success(data?.message)
+                toast.success("Payment succeeded!");
+                navigate(`/checkout/success?transaction_id=${paymentIntent.id}`)
+            })
         }
-     
-        
+
         setIsLoading(false);
     };
 
     const paymentElementOptions = {
         layout: "tabs"
-    }
+    };
 
     return (
         <form id="payment-form" onSubmit={handleSubmit}>
-            {/* <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs" /> */}
             <PaymentElement id="payment-element" options={paymentElementOptions} />
             <button disabled={isLoading || !stripe || !elements} id="submit">
                 <span id="button-text">
-                    {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
+                    {isLoading ? <div className="spinner" id="spinner"></div> : "Place Order"}
                 </span>
             </button>
-            {/* Show any error or success messages */}
             {message && <div id="payment-message">{message}</div>}
         </form>
     );

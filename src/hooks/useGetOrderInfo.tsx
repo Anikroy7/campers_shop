@@ -1,14 +1,10 @@
-import { useAppSelector } from "../redux/hook";
 
-const { cartItems } = useAppSelector((state) => state.cart);
-let totalPrice = 0
-const orderedProducts = []
+const useGetOrderInfo = (userInfo = '', clientSecret, cartItems) => {
 
-const useGetOrderInfo = (userInfo='', clientSecret) => {
-    const orderData = {
-        ...userInfo, products: orderedProducts, totalPrice,clientSecret
-    
-    }
+    let totalPrice = 0
+    const orderedProducts = []
+
+   
     cartItems.map((item) => {
         orderedProducts.push({
             id: item._id,
@@ -19,7 +15,10 @@ const useGetOrderInfo = (userInfo='', clientSecret) => {
         acc += (curr.price * curr.quantity)
         return acc
     }, 0)
+    const orderData = {
+        ...userInfo, products: orderedProducts, totalPrice, clientSecret
 
+    }
 
     return orderData
 }

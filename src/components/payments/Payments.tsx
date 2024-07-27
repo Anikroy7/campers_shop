@@ -20,8 +20,8 @@ export default function Payments() {
   const navigate = useNavigate();
   const [clientSecret, setClientSecret] = useState("");
   const { cartItems } = useAppSelector((state) => state.cart);
-
-  useEffect(() => {   
+  console.log('console form chekcout poage',cartItems)
+  useEffect(() => {
     if (!cartItems.length) {
       navigate("/");
     }
@@ -78,8 +78,8 @@ export default function Payments() {
         </div>
 
         {clientSecret && (
-          <Elements  options={options} stripe={stripePromise}>
-            <CheckoutForm name={name} address={address} contactNo={contactNo} email={email} clientSecret={clientSecret} setError={setError}/>
+          <Elements options={options} stripe={stripePromise}>
+            <CheckoutForm name={name} address={address} contactNo={contactNo} email={email} clientSecret={clientSecret} setError={setError} />
           </Elements>
         )}
       </div>

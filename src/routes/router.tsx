@@ -9,6 +9,7 @@ import AddProductForm from "../components/ui/dashboard/AddProductForm";
 import ProductsPage from "../pages/ProductsPage";
 import UpdateProductForm from "../components/ui/dashboard/UpadateProduct";
 import Payments from "../components/payments/Payments";
+import Success from "../components/payments/Success";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: "/checkout",
     element: <Payments />,
+  },
+  {
+    path: "/checkout/success",
+    element: <Success />,
   },
   {
     path: "/dashboard",

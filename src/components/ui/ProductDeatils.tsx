@@ -1,10 +1,12 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "../../assets/css/ProductDetails.css";
 import { useGetSingleProductQuery } from "../../redux/api/productApi";
 import Loading from "./Loading";
 import { useState } from "react";
 import { useAppDispatch } from "../../redux/hook";
-import { addToRemoveFromCart } from "../../redux/features/cart/cartSlice";
+import { addToRemoveFromCart, singleCheckout } from "../../redux/features/cart/cartSlice";
+import { FaArrowRight, FaCartPlus } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -19,8 +21,9 @@ export default function ProductDetails() {
     type: "increment",
     data: data.data,
   };
-  const handleCartItems = () => {
+  const handleCartItems = (pdName) => {
     dispatch(addToRemoveFromCart(payload));
+    toast.success(`${pdName} added to cart`)
   };
 
   return (
@@ -72,14 +75,18 @@ export default function ProductDetails() {
             </div>
             <div className="mt-5">
               <button
-                onClick={handleCartItems}
-                className="btn btn-sm btn-error text-white mr-2"
+                onClick={()=>handleCartItems(name)}
+                className="btn btn-sm btn-error text-white mr-2 w-[40%]"
               >
+                <FaCartPlus className="mr-2" />
                 Add To Cart
               </button>
-              <button className="btn btn-sm btn-accent  text-white mr-2">
+              <Link to={'/checkout'}>
+              <button  onClick={()=>dispatch(singleCheckout(data.data))} className="btn btn-sm btn-accent  text-white mr-2 w-[40%]">
+                <FaArrowRight className="mr-2" />
                 Procced to checkout
               </button>
+              </Link>
             </div>
           </div>
         </div>
