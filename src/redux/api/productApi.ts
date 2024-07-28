@@ -9,6 +9,9 @@ export const productApi = createApi({
       query: () => "/products",
       providesTags: ["products"],
     }),
+    getFpProducts: builder.query({
+      query: () => "/products/fp",
+    }),
     getSingleProduct: builder.query({
       query: (id) => `/products/${id}`,
     }),
@@ -50,4 +53,5 @@ export const {
   useDeleteProductMutation,
   useGetSingleProductQuery,
   useUpdateProductMutation,
+  useGetFpProductsQuery
 } = productApi;

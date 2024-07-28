@@ -10,6 +10,7 @@ import ProductsPage from "../pages/ProductsPage";
 import UpdateProductForm from "../components/ui/dashboard/UpadateProduct";
 import Payments from "../components/payments/Payments";
 import Success from "../components/payments/Success";
+import FeaturedProducts from "../components/ui/FeaturedProducts";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
   {
     path: "/checkout/success",
     element: <Success />,
+  },
+  {
+    path: "/fp",
+    element: <FeaturedProducts />,
   },
   {
     path: "/dashboard",

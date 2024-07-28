@@ -1,4 +1,6 @@
-export default function Category() {
+
+export default function Category({product}) {
+// console.log(product)
   return (
     <div className="flex justify-center items-center px-7">
       <div className="2xl:mx-auto 2xl:container py-12 px-4 sm:px-6  2xl:px-0 w-full">
@@ -12,7 +14,7 @@ export default function Category() {
             <div className="relative group flex justify-center items-center h-full w-full">
               <img
                 className="object-center object-cover h-full w-full"
-                src="https://i.ibb.co/ThPFmzv/omid-armin-m-VSb6-PFk-VXw-unsplash-1-1.png"
+                src={'product.images[0]'}
                 alt="girl-image"
               />
               <button className="dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 bottom-4 z-10 absolute text-base font-medium leading-none text-gray-800 py-3 w-36 bg-white">
