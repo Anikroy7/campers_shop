@@ -1,20 +1,22 @@
 import { Link } from "react-router-dom";
-import { addToRemoveFromCart, removeProductFromCart } from "../../redux/features/cart/cartSlice";
+import {
+  addToRemoveFromCart,
+  removeProductFromCart,
+} from "../../redux/features/cart/cartSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import usePageUnloadWarning from "../../hooks/usePageUnloadWarning";
 
 export default function Cart() {
   const { cartItems } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
-  console.log('console form cart page',cartItems)
   const totalItems = cartItems.reduce((acc, curr) => {
     acc += curr.quantity;
     return acc;
   }, 0);
   const totalPrice = cartItems.reduce((acc, curr) => {
-    acc += (curr.price * curr.quantity)
-    return acc
-  }, 0)
+    acc += curr.price * curr.quantity;
+    return acc;
+  }, 0);
 
   const handleCartItems = (type, item) => {
     const payload = {
@@ -22,15 +24,15 @@ export default function Cart() {
       data: item,
     };
     dispatch(addToRemoveFromCart(payload));
-    console.log(cartItems)
+    console.log(cartItems);
   };
-  const removeProduct =(productId)=>{
-    console.log('come')
-    dispatch(removeProdvuctFromCart(productId))
-  }
+  const removeProduct = (productId) => {
+    const isConfirm= window.confirm('Product will be remove from your cart ?')
+    if(isConfirm){
+      dispatch(removeProductFromCart(productId));
+    }
+  };
   usePageUnloadWarning(cartItems.length > 0);
-
-
 
   return (
     <>
@@ -60,66 +62,78 @@ export default function Cart() {
               </h3>
             </div>
 
-
-            {cartItems.length > 0 ? cartItems.map((item) => (
-              <div className="flex flex-col md:flex-row items-center hover:bg-gray-100 -mx-4 px-6 py-5 shadow-sm my-3">
-                <div className="flex w-full md:w-2/5">
-                  <div className="w-20 md:w-24">
-                    <img className="h-24 md:h-32" src={item.images[0]} alt="" />
+            {cartItems.length > 0 ? (
+              cartItems.map((item) => (
+                <div className="flex flex-col md:flex-row items-center hover:bg-gray-100 -mx-4 px-6 py-5 shadow-sm my-3">
+                  <div className="flex w-full md:w-2/5">
+                    <div className="w-20 md:w-24">
+                      <img
+                        className="h-24 md:h-32"
+                        src={item.images[0]}
+                        alt=""
+                      />
+                    </div>
+                    <div className="flex flex-col justify-between ml-4 flex-grow">
+                      <span className="font-bold text-sm">
+                        {item.name.slice(0, 20)}...
+                      </span>
+                      <span className="text-red-500 text-xs">
+                        {item.category}
+                      </span>
+                      <span
+                        onClick={() => removeProduct(item._id)}
+                        className="font-semibold hover:cursor-pointer hover:text-red-500 text-gray-500 text-xs"
+                      >
+                        Remove
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex flex-col justify-between ml-4 flex-grow">
-                    <span className="font-bold text-sm">
-                      {item.name.slice(0, 20)}...
-                    </span>
-                    <span className="text-red-500 text-xs">
-                      {item.category}
-                    </span>
-                    <span onClick={() => removeProduct(item._id)} className="font-semibold hover:cursor-pointer hover:text-red-500 text-gray-500 text-xs">
-                      Remove
-                    </span>
-                  </div>
-                </div>
-                <div className="flex md:justify-center w-full md:w-1/5 mt-3">
-                  <svg
-                    onClick={() => handleCartItems("decrement", item)}
-                    className="fill-current text-gray-600 w-3 hover:text-orange-500 hover:cursor-pointer md:w-4"
-                    viewBox="0 0 448 512"
-                  >
-                    <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
-                  </svg>
+                  <div className="flex md:justify-center w-full md:w-1/5 mt-3">
+                    <svg
+                      onClick={() => handleCartItems("decrement", item)}
+                      className="fill-current text-gray-600 w-3 hover:text-orange-500 hover:cursor-pointer md:w-4"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
+                    </svg>
 
-                  <input
-                    disabled
-                    id="itemsQuantityInput-{{ $item->id }}"
-                    className="mx-2 border text-center w-8"
-                    type="text"
-                    value={item.quantity}
-                  />
-                  <svg
-                    onClick={() => handleCartItems("increment", item)}
-                    className="fill-current text-gray-600 w-3 hover:text-orange-500 hover:cursor-pointer md:w-4"
-                    viewBox="0 0 448 512"
-                  >
-                    <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
-                  </svg>
-                </div>
-                <span className="md:text-center w-full md:w-1/5 font-semibold text-sm">
-                  <span className="md:hidden">Price:</span>
-                  <span className="text-2xl font-bold">$</span> {item.price}
-                </span>
-                <span className="md:text-center w-full md:w-1/5 font-semibold text-sm">
-                  <span className="md:hidden">Total Price:</span>
-                  <span className="text-2xl font-bold">$</span>{" "}
-                  <span id="current_price-{{ $item->id }}">
-                    {item.quantity * item.price}
+                    <input
+                      disabled
+                      id="itemsQuantityInput-{{ $item->id }}"
+                      className="mx-2 border text-center w-8"
+                      type="text"
+                      value={item.quantity}
+                    />
+                    <svg
+                      aria-disabled={true}
+                      onClick={() => handleCartItems("increment", item)}
+                      style={{display: `${item.stockQuantity===item.quantity ? 'none': 'block'} `}}
+                      className="fill-current text-gray-600 w-3 hover:text-orange-500 hover:cursor-pointer md:w-4"
+                      viewBox="0 0 448 512"
+                    >
+                      <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
+                    </svg>
+                  </div>
+                  <span className="md:text-center w-full md:w-1/5 font-semibold text-sm">
+                    <span className="md:hidden">Price: </span>
+                    <span className="text-2xl font-bold">$</span> {item.price}
                   </span>
-                </span>
+                  <span className="md:text-center w-full md:w-1/5 font-semibold text-sm">
+                    <span className="md:hidden">Total Price:</span>
+                    <span className="text-2xl font-bold">$</span>{" "}
+                    <span id="current_price-{{ $item->id }}">
+                      {item.quantity * item.price}
+                    </span>
+                  </span>
+                </div>
+              ))
+            ) : (
+              <div className="text-center mt-8">
+                <p className="text-lg font-semibold text-orange-500">
+                  No items found
+                </p>
               </div>
-            )) : <div className="text-center mt-8">
-              <p className="text-lg font-semibold text-orange-500">
-                No items found
-              </p>
-            </div>}
+            )}
 
             <Link
               to={"/products"}

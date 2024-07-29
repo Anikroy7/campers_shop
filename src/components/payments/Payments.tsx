@@ -20,7 +20,6 @@ export default function Payments() {
   const navigate = useNavigate();
   const [clientSecret, setClientSecret] = useState("");
   const { cartItems } = useAppSelector((state) => state.cart);
-  console.log('console form chekcout poage',cartItems)
   useEffect(() => {
     if (!cartItems.length) {
       navigate("/");
