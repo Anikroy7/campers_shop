@@ -5,6 +5,7 @@ import {
 } from "../../redux/features/cart/cartSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
 import usePageUnloadWarning from "../../hooks/usePageUnloadWarning";
+import {  TProduct } from "../../types";
 
 export default function Cart() {
   const { cartItems } = useAppSelector((state) => state.cart);
@@ -18,7 +19,7 @@ export default function Cart() {
     return acc;
   }, 0);
 
-  const handleCartItems = (type, item) => {
+  const handleCartItems = (type:string, item:TProduct) => {
     const payload = {
       type: type,
       data: item,
@@ -26,7 +27,7 @@ export default function Cart() {
     dispatch(addToRemoveFromCart(payload));
     console.log(cartItems);
   };
-  const removeProduct = (productId) => {
+  const removeProduct = (productId:string) => {
     const isConfirm= window.confirm('Product will be remove from your cart ?')
     if(isConfirm){
       dispatch(removeProductFromCart(productId));
@@ -69,7 +70,7 @@ export default function Cart() {
                     <div className="w-20 md:w-24">
                       <img
                         className="h-24 md:h-32"
-                        src={item.images[0]}
+                        src={item.images&&item.images[0]}
                         alt=""
                       />
                     </div>

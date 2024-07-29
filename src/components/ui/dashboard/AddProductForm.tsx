@@ -1,7 +1,6 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useCreateProductMutation } from "../../../redux/api/productApi";
 import Loading from "../Loading";
-import { redirect } from "react-router-dom";
 import toast from "react-hot-toast";
 
 type Inputs = {
@@ -14,29 +13,23 @@ type Inputs = {
   images: any;
 };
 
+
+
 export default function AddProductForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<Inputs>(/* {defaultValues:{
-    name: 'test',
-    description: 'test des',
-    category: 'test cate',
-    price: 255,
-    stockQuantity: 54,
-    ratings: 5,
-    
-  }} */);
+  } = useForm<Inputs>();
 
-  const [createProduct, { isLoading, isSuccess, error, isError }] =
+  const [createProduct, { isLoading, isSuccess }] =
     useCreateProductMutation();
+
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const formData = new FormData();
 
-    // Append all form fields except for images
     Object.entries(data).forEach(([key, value]) => {
       if (key !== "images") {
         formData.append(
@@ -46,7 +39,6 @@ export default function AddProductForm() {
       }
     });
 
-    // Append each image file to the FormData object
     Array.from(data.images).forEach((file) => {
       formData.append("images", file as any);
     });
@@ -58,12 +50,7 @@ export default function AddProductForm() {
 
   if (isSuccess) toast.success("Product added successfully");
 
-  console.log(isLoading, isSuccess, error, isError);
-  if (isError) {
-    error?.data?.errorSources?.forEach((error) => {
-      toast.error(error?.message);
-    });
-  }
+
 
   return (
     <section

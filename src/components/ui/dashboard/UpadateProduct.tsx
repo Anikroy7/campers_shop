@@ -39,11 +39,11 @@ export default function UpdateProductForm() {
       toast.success("Product updated successfully");
       navigate("/dashboard");
     }
-    if (isError && error?.data?.errorSources) {
+    /* if (isError && error?.data?.errorSources) {
       error.data.errorSources.forEach((err) => {
         toast.error(err.message);
       });
-    }
+    } */
   }, [isSuccess, isError, error]);
   if (getProductLoading) return <Loading />;
 
@@ -209,7 +209,7 @@ export default function UpdateProductForm() {
                   {...register("images")}
                 />
                 <div className="grid grid-cols-4 gap-4">
-                  {data.data.images.map((image) => (
+                  {data.data.images.map((image:string) => (
                     <div key={image} className="avatar">
                       <div className="w-24 rounded">
                         <img src={image} />

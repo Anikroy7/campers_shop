@@ -67,7 +67,7 @@ export default function Products() {
                       className="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl"
                     >
                       <div>
-                        <ImageSlider key={_id} images={images} />
+                        <ImageSlider key={_id} images={images as string[]} />
                         <div className="px-4 py-3 w-72">
                           <span className="text-gray-400 mr-3 uppercase text-xs">
                             {category}

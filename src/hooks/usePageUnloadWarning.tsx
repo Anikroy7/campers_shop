@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
-    const usePageUnloadWarning = (shouldWarn) => {
+    const usePageUnloadWarning = (shouldWarn:boolean) => {
         useEffect(() => {
-            const handleBeforeUnload = (event) => {
+            const handleBeforeUnload = (event:BeforeUnloadEvent) => {
                 console.log(event)
                 if (shouldWarn) {
                     const message = "sdgas";

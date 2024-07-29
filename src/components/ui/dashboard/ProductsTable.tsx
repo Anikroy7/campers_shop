@@ -5,11 +5,11 @@ import {
 } from "../../../redux/api/productApi";
 import Loading from "../Loading";
 import { Link } from "react-router-dom";
+import { TProduct } from "../../../types";
 
 export default function ProductsTable() {
-  const arr = [1, 2, 3, 4, 5];
 
-  const { data, isLoading, error, isError } = useGetProductsQuery(undefined);
+  const { data, isLoading } = useGetProductsQuery(undefined);
   const [deleteProduct, { isSuccess, data: deletedData }] =
     useDeleteProductMutation();
 
@@ -20,18 +20,15 @@ export default function ProductsTable() {
     }
   };
   if (isLoading) return <Loading />;
-  console.log(data);
   if (isSuccess)
     toast.success("Product deleted successsfully", {
       id: deletedData.data._id,
     });
 
-  console.log(deletedData);
 
   return (
     <div className="overflow-x-auto ">
       <table className="table text-black">
-        {/* head */}
         <thead>
           <tr>
             <th>Image</th>
@@ -45,14 +42,16 @@ export default function ProductsTable() {
         <tbody>
           {data ? (
             data.data.map(
-              ({ name, price, images, stockQuantity, ratings, _id }) => (
-                <tr key={_id}>
+              (product: TProduct) => {
+                const { name, price, images, stockQuantity, ratings, _id } = product
+
+                return <tr key={_id}>
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar">
                         <div className="mask mask-squircle h-12 w-12">
                           <img
-                            src={images[0]}
+                            src={images && images[0]}
                             alt="Avatar Tailwind CSS Component"
                           />
                         </div>
@@ -78,7 +77,7 @@ export default function ProductsTable() {
                     </Link>
                   </th>
                 </tr>
-              )
+              }
             )
           ) : (
             <p className="text-center w-full">No products here..</p>

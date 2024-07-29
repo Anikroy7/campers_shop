@@ -21,9 +21,9 @@ export default function ProductDetails() {
     type: "increment",
     data: data.data,
   };
-  const handleCartItems = (pdName) => {
+  const handleCartItems = () => {
     dispatch(addToRemoveFromCart(payload));
-    toast.success(`${pdName} added to cart`)
+    toast.success('added to cart')
   };
 
   return (
@@ -31,11 +31,11 @@ export default function ProductDetails() {
       <section id="product-info">
         <div className="item-image-parent">
           <div className="item-list-vertical">
-            {images.map((image, index) => (
+            {images.map((image:string, index:number) => (
               <div key={index} className="thumb-box">
                 <img
                   onClick={() => setImgNum(index)}
-                  id={index}
+                  id={`${index}`}
                   src={image}
                   alt="thumbnail"
                 />
@@ -75,7 +75,7 @@ export default function ProductDetails() {
             </div>
             <div className="mt-5">
               <button
-                onClick={()=>handleCartItems(name)}
+                onClick={()=>handleCartItems()}
                 className="btn btn-sm btn-error text-white mr-2 w-[40%]"
               >
                 <FaCartPlus className="mr-2" />
