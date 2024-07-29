@@ -5,6 +5,7 @@ const Filter = ({
   setSortByPrice,
   setHighPrice,
   setLowPrice,
+  handleSetFilter,
 }) => {
   return (
     <div className="bg-gray-100 text-gray-900 h-[100vh] p-8">
@@ -18,44 +19,65 @@ const Filter = ({
               type="text"
               placeholder="Search by name or description"
               className="p-2 mb-4 mr-4 w-full  bg-white text-gray-900 rounded border border-gray-300"
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={(e) =>
+                handleSetFilter(e.target.value, "filterBySearch")
+              }
             />
           </div>
           <div className="w-[100%]">
+            <label className="block mb-2 text-gray-700">
+              Filter Products By Category
+              <select
+                onChange={(e) =>
+                  handleSetFilter(e.target.value, "filterByCategory")
+                }
+                className="p-2 mb-4 mr-4 w-full bg-white text-gray-900 rounded border border-gray-300"
+              >
+                <option value="">All Categories</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="w-[100%]">
+            <label className="block mb-2 text-gray-700">
+              Filter Products By Price Range
+              <select
+                onChange={(e) =>
+                  handleSetFilter(e.target.value, "filterByPriceRange")
+                }
+                className="p-2 mb-4 mr-4 w-full bg-white text-gray-900 rounded border border-gray-300"
+              >
+                <option value="">All</option>
+                <option value="0-200">0-200</option>
+                <option value="201-500">201-500</option>
+                <option value="501-2000">501-2000</option>
+                <option value="2001-more">up to 2000</option>
+              </select>
+            </label>
+          </div>
+
+          <label className="block mb-2 text-gray-700">
+            Sort Products By Price
             <select
-              onChange={(e) => setCategory(e.target.value)}
-              className="p-2 mb-4 mr-4 w-full bg-white text-gray-900 rounded border border-gray-300"
+              onChange={(e) =>
+                handleSetFilter(e.target.value, "filterByPriceOrder")
+              }
+              className="p-2 mb-4 w-full bg-white text-gray-900 rounded border border-gray-300"
             >
-              <option value="">All Categories</option>
-              {categories.map((category) => (
-                <option value={category}>{category}</option>
-              ))}
+              <option value="">All</option>
+              <option value="lowToHigh">Price: Low to High</option>
+              <option value="highToLow">Price: High to Low</option>
             </select>
-          </div>
-          <div className="flex items-center mb-4 w-full">
-            <label className="mr-2">Price: </label>
-            <input
-              onChange={(e) => setLowPrice(e.target.value)}
-              type="number"
-              className="p-2 w-20 bg-white text-gray-900 rounded border border-gray-300 mr-2"
-            />
-            <span>-</span>
-            <input
-              onChange={(e) => setHighPrice(e.target.value)}
-              type="number"
-              className="p-2 w-20 bg-white text-gray-900 rounded border border-gray-300 ml-2"
-            />
-          </div>
-          <select
-            onChange={(e) => setSortByPrice(e.target.value)}
-            className="p-2 mb-4 w-full bg-white text-gray-900 rounded border border-gray-300"
-          >
-            <option value="">Sort by price</option>
-            <option value="lowToHigh">Price: Low to High</option>
-            <option value="desc">Price: High to Low</option>
-          </select>
+          </label>
         </div>
-        <button className="p-2 mb-4 bg-red-500 text-white rounded">
+        <button
+          onClick={() => handleSetFilter(null, "clear")}
+          className="p-2 mb-4 bg-red-500 text-white rounded"
+        >
           Clear Filters
         </button>
       </div>
@@ -64,3 +86,4 @@ const Filter = ({
 };
 
 export default Filter;
+  

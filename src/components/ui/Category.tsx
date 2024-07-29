@@ -1,6 +1,10 @@
+import { useGetProductsQuery } from "../../redux/api/productApi";
+import Loading from "./Loading";
 
-export default function Category({product}) {
-// console.log(product)
+export default function Category() {
+  const { data, isLoading } = useGetProductsQuery(undefined);
+  if (isLoading) return <Loading />;
+
   return (
     <div className="flex justify-center items-center px-7">
       <div className="2xl:mx-auto 2xl:container py-12 px-4 sm:px-6  2xl:px-0 w-full">
@@ -14,11 +18,11 @@ export default function Category({product}) {
             <div className="relative group flex justify-center items-center h-full w-full">
               <img
                 className="object-center object-cover h-full w-full"
-                src={'product.images[0]'}
+                src={data.data[0].images[1]}
                 alt="girl-image"
               />
               <button className="dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 bottom-4 z-10 absolute text-base font-medium leading-none text-gray-800 py-3 w-36 bg-white">
-                Women
+                {data.data[0].category}
               </button>
               <div className="absolute opacity-0 group-hover:opacity-100 transition duration-500 bottom-3 py-6 z-0 px-20 w-36 bg-white bg-opacity-50"></div>
             </div>
@@ -27,22 +31,22 @@ export default function Category({product}) {
               <div className="relative group flex justify-center items-center h-full w-full">
                 <img
                   className="object-center object-cover h-full w-full"
-                  src="https://i.ibb.co/SXZvYHs/irene-kredenets-DDqx-X0-7v-KE-unsplash-1.png"
+                  src={data.data[1].images[1]}
                   alt="shoe-image"
                 />
                 <button className="dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 bottom-4 z-10 absolute text-base font-medium leading-none text-gray-800 py-3 w-36 bg-white">
-                  Shoes
+                  {data.data[1].category}
                 </button>
                 <div className="absolute opacity-0 group-hover:opacity-100 transition duration-500 bottom-3 py-6 z-0 px-20 w-36 bg-white bg-opacity-50"></div>
               </div>
               <div className="relative group flex justify-center items-center h-full w-full">
                 <img
                   className="object-center object-cover h-full w-full"
-                  src="https://i.ibb.co/Hd1pVxW/louis-mornaud-Ju-6-TPKXd-Bs-unsplash-1-2.png"
+                  src={data.data[2].images[2]}
                   alt="watch-image"
                 />
                 <button className="dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 bottom-4 z-10 absolute text-base font-medium leading-none text-gray-800 py-3 w-36 bg-white">
-                  Watches
+                {data.data[2].category}
                 </button>
                 <div className="absolute opacity-0 group-hover:opacity-100 transition duration-500 bottom-3 py-6 z-0 px-20 w-36 bg-white bg-opacity-50"></div>
               </div>
@@ -51,23 +55,23 @@ export default function Category({product}) {
             <div className="relative group justify-center items-center h-full w-full hidden lg:flex">
               <img
                 className="object-center object-cover h-full w-full"
-                src="https://i.ibb.co/PTtRBLL/olive-tatiane-Im-Ez-F9-B91-Mk-unsplash-1.png"
+                src={data.data[4].images[0]}
                 alt="girl-image"
               />
               <button className="dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 bottom-4 z-10 absolute text-base font-medium leading-none text-gray-800 py-3 w-36 bg-white">
-                Accessories
+              {data.data[4].category}
               </button>
               <div className="absolute opacity-0 group-hover:opacity-100 transition duration-500 bottom-3 py-6 z-0 px-20 w-36 bg-white bg-opacity-50"></div>
             </div>
             <div className="relative group flex justify-center items-center h-full w-full mt-4 md:hidden md:mt-8 lg:hidden">
               <img
                 className="object-center object-cover h-full w-full hidden md:block"
-                src="https://i.ibb.co/6FjW19n/olive-tatiane-Im-Ez-F9-B91-Mk-unsplash-2.png"
+                src={data.data[1].images[1]}
                 alt="girl-image"
               />
               <img
                 className="object-center object-cover h-full w-full md:hidden"
-                src="https://i.ibb.co/sQgHwHn/olive-tatiane-Im-Ez-F9-B91-Mk-unsplash-1.png"
+                src={data.data[1].images[1]}
                 alt="olive-tatiane-Im-Ez-F9-B91-Mk-unsplash-2"
               />
               <button className="dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 bottom-4 z-10 absolute text-base font-medium leading-none text-gray-800 py-3 w-36 bg-white">
@@ -79,12 +83,12 @@ export default function Category({product}) {
           <div className="relative group hidden md:flex justify-center items-center h-full w-full mt-4 md:mt-8 lg:hidden">
             <img
               className="object-center object-cover h-full w-full hidden md:block"
-              src="https://i.ibb.co/6FjW19n/olive-tatiane-Im-Ez-F9-B91-Mk-unsplash-2.png"
+              src={data.data[1].images[0]}
               alt="girl-image"
             />
             <img
               className="object-center object-cover h-full w-full sm:hidden"
-              src="https://i.ibb.co/sQgHwHn/olive-tatiane-Im-Ez-F9-B91-Mk-unsplash-1.png"
+              src={data.data[1].images[0]}
               alt="olive-tatiane-Im-Ez-F9-B91-Mk-unsplash-2"
             />
             <button className="dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 bottom-4 z-10 absolute text-base font-medium leading-none text-gray-800 py-3 w-36 bg-white">

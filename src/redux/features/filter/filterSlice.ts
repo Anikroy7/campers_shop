@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 interface Product {
   id: number;
@@ -10,19 +10,9 @@ interface Product {
 
 interface FilterState {
   products: Product[];
-  search: string;
-  category: string;
-  lowPrice: number;
-  highPrice: number;
-  sortByPrice: "lowToHigh" | "highToLow";
 }
 
 const initialState: FilterState = {
-  search: "",
-  category: "",
-  lowPrice: 0,
-  highPrice: Infinity,
-  sortByPrice: "lowToHigh",
   products: [],
 };
 
@@ -30,43 +20,85 @@ const filterSlice = createSlice({
   name: "filter",
   initialState,
   reducers: {
-    setProducts: (state, action: PayloadAction<{ products: Product[] }>) => {
+    setProducts: (state, action) => {
       state.products = action.payload.products;
     },
-    setFilter: (state, action: PayloadAction<Partial<FilterState>>) => {
-      console.log(action.payload.products);
-      const { search, category, lowPrice, highPrice, sortByPrice, products } =
-        action.payload;
-      let filteredProducts = state.products;
+    setFilter: (state, action) => {
+      console.log(action.payload, action.payload.data.products);
+      const payloadProducts = action.payload.data.products;
+      const payloadText = action.payload.data.text;
+      switch (action.payload.type) {
+        case "filterBySearch":
+          state.products = [];
+          state.products = payloadProducts.filter((item) =>
+            item.name.toLowerCase().includes(payloadText.toLowerCase())
+          );
+          break;
+        case "filterByCategory":
+          state.products = [];
+          state.products = payloadProducts.filter((item) =>
+            item.category.toLowerCase().includes(payloadText.toLowerCase())
+          );
+          break;
+        case "filterByPriceRange":
+          state.products = [];
+          switch (payloadText) {
+            case "0-200":
+              state.products = payloadProducts.filter(
+                (product) => product.price <= 200
+              );
+              break;
+            case "201-500":
+              state.products = payloadProducts.filter(
+                (product) => product.price > 200 && product.price <= 500
+              );
+              break;
+            case "501-2000":
+              state.products = payloadProducts.filter(
+                (product) => product.price > 500 && product.price <= 2000
+              );
+              break;
+            case "2001-more":
+              state.products = payloadProducts.filter(
+                (product) => product.price > 2000
+              );
+              break;
 
-      if (category) {
-        filteredProducts = products.filter(
-          (product) => product.category.toLowerCase() === category.toLowerCase()
-        );
-      } else {
-        filteredProducts = products;
+            default:
+              state.products = payloadProducts;
+              break;
+          }
+          break;
+        case "filterByPriceOrder":
+          switch (payloadText) {
+            case "lowToHigh":
+              state.products = [];
+              const asc = [...payloadProducts].sort(
+                (a, b) => a.price - b.price
+              );
+              state.products = asc;
+              break;
+            case "highToLow":
+              state.products = [];
+              const des = [...payloadProducts].sort(
+                (a, b) => b.price - a.price
+              );
+              state.products = des;
+              break;
+            default:
+              state.products = payloadProducts;
+              break;
+          }
+          break;
+        case "clear":
+          state.products = [];
+          state.products = payloadProducts;
+          break;
+        default:
+          break;
       }
-
-      if (lowPrice !== undefined) {
-        filteredProducts = filteredProducts?.filter(
-          (product) => product.price >= lowPrice
-        );
-      }
-
-      if (highPrice !== undefined && highPrice !== Infinity) {
-        filteredProducts = filteredProducts?.filter(
-          (product) => product.price <= highPrice
-        );
-      }
-
-      if (sortByPrice) {
-        filteredProducts = filteredProducts.sort((a, b) =>
-          sortByPrice === "lowToHigh" ? a.price - b.price : b.price - a.price
-        );
-      }
-
-      state.products = filteredProducts;
     },
+    
   },
 });
 
