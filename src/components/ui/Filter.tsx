@@ -1,12 +1,44 @@
-const Filter = ({
+import { useDispatch } from "react-redux";
+import { setFilter } from "../../redux/features/filter/filterSlice";
+import React, { useState } from "react";
+import { TProduct } from "../../types";
+
+type FilterProps = {
+  categories: string[];
+  products: TProduct[]
+}
+
+const Filter: React.FC<FilterProps> = ({
   categories,
-  setSearchText,
-  setCategory,
-  setSortByPrice,
-  setHighPrice,
-  setLowPrice,
-  handleSetFilter,
+  products
 }) => {
+  const dispatch = useDispatch();
+
+  const [searchText, setSearchText] = useState('');
+  const [category, setCategory] = useState('');
+  const [priceRange, setPriceRange] = useState('');
+  const [priceSort, setPriceSort] = useState('')
+  const handleSetFilter = (text: string, filterType: string) => {
+    if (filterType == 'clear') {
+      handleClearValue();
+    }
+    const payload = {
+      type: filterType,
+      data: {
+        products,
+        text: text,
+      },
+    };
+    dispatch(setFilter(payload));
+  };
+
+  const handleClearValue = () => {
+    setSearchText('')
+    setCategory('');
+    setPriceRange('')
+    setPriceSort('')
+  }
+
   return (
     <div className="bg-gray-100 text-gray-900 h-[100vh] p-8">
       <div className="max-w-4xl mx-auto">
@@ -16,20 +48,25 @@ const Filter = ({
         <div className="  mb-4">
           <div>
             <input
+              value={searchText}
               type="text"
               placeholder="Search by name or description"
               className="p-2 mb-4 mr-4 w-full  bg-white text-gray-900 rounded border border-gray-300"
-              onChange={(e) =>
-                handleSetFilter(e.target.value, "filterBySearch")
-              }
+              onChange={(e) => {
+                setSearchText(e.target.value);
+                handleSetFilter(e.target.value, 'filterBySearch');
+              }}
             />
           </div>
           <div className="w-[100%]">
             <label className="block mb-2 text-gray-700">
               Filter Products By Category
               <select
-                onChange={(e) =>
-                  handleSetFilter(e.target.value, "filterByCategory")
+                value={category}
+                onChange={(e) => {
+                  setCategory(e.target.value)
+                  handleSetFilter(e.target.value, "filterByCategory");
+                }
                 }
                 className="p-2 mb-4 mr-4 w-full bg-white text-gray-900 rounded border border-gray-300"
               >
@@ -46,8 +83,11 @@ const Filter = ({
             <label className="block mb-2 text-gray-700">
               Filter Products By Price Range
               <select
-                onChange={(e) =>
+                value={priceRange}
+                onChange={(e) => {
+                  setPriceRange(e.target.value)
                   handleSetFilter(e.target.value, "filterByPriceRange")
+                }
                 }
                 className="p-2 mb-4 mr-4 w-full bg-white text-gray-900 rounded border border-gray-300"
               >
@@ -63,8 +103,11 @@ const Filter = ({
           <label className="block mb-2 text-gray-700">
             Sort Products By Price
             <select
-              onChange={(e) =>
+              value={priceSort}
+              onChange={(e) => {
+                setPriceSort(e.target.value)
                 handleSetFilter(e.target.value, "filterByPriceOrder")
+              }
               }
               className="p-2 mb-4 w-full bg-white text-gray-900 rounded border border-gray-300"
             >
@@ -75,7 +118,7 @@ const Filter = ({
           </label>
         </div>
         <button
-          onClick={() => handleSetFilter(null, "clear")}
+          onClick={() => handleSetFilter('', "clear")}
           className="p-2 mb-4 bg-red-500 text-white rounded"
         >
           Clear Filters
@@ -86,4 +129,3 @@ const Filter = ({
 };
 
 export default Filter;
-  

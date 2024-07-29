@@ -1,79 +1,86 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { TProduct } from "../../../types";
+import toast from "react-hot-toast";
 
+type InitialState = {
+  cartItems: TProduct[]
+}
+
+const initialState: InitialState = {
+  cartItems: []
+}
 
 const cartSlice = createSlice({
   name: "cart",
-  initialState: {
-    cartItems: [],
-  },
+
+  initialState: initialState,
   reducers: {
     addToRemoveFromCart: (state, action) => {
-      if (action.payload.type === "increment") {
-        let cartItems = [...state.cartItems];
-        const productExists = cartItems.find(
-          (item) => item._id === action.payload.data._id
+      if( action.payload.data.stockQuantity){
+        const product = state.cartItems.find(
+          (product) => product._id === action.payload.data._id
         );
-
-        if (!productExists) {
-          cartItems.push({
-            ...action.payload.data,
-            quantity: 1,
-          });
-        } else {
-          const newProduct = {
-            ...productExists,
-            quantity: productExists.quantity + 1,
-          };
-          const newCartItems = cartItems.filter(
-            (item) => item._id !== newProduct._id
-          );
-          cartItems = [newProduct, ...newCartItems];
+        switch (action.payload.type) {
+          case "increment":
+            if (!product) {
+              state.cartItems.push({ ...action.payload.data, quantity: 1 });
+              toast.success(` added to cart`);
+            } else {
+              if (product.stockQuantity > product.quantity) {
+                const newProduct = {
+                  ...product,
+                  quantity: product.quantity + 1,
+                };
+                state.cartItems = state.cartItems.filter(
+                  (pd) => pd._id !== product._id
+                );
+                state.cartItems.push(newProduct);
+                toast.success(` added to cart`);
+              } else {
+                toast.error("Quantity is more than stock quantity!"!);
+              }
+            }
+            break;
+          case "decrement":
+            if(product){
+              if (product.quantity === 1) {
+                state.cartItems = state.cartItems.filter(
+                  (item) => item._id !== product._id
+                );
+              } else {
+                const newProduct = {
+                  ...product,
+                  quantity: product.quantity - 1,
+                };
+                state.cartItems = state.cartItems.filter(
+                  (pd) => pd._id !== product._id
+                );
+                state.cartItems.push(newProduct);
+              }
+            }
+            break;
+  
+          default:
+            return state;
         }
-        return {
-          ...state,
-          cartItems,
-        };
+      }else{
+        toast.error("Not available!"!);
       }
-
-      if (action.payload.type === "decrement") {
-        let cartItems = [...state.cartItems];
-        const productExists = cartItems.find(
-          (item) => item._id === action.payload.data._id
-        );
-
-        if (productExists) {
-          if (productExists.quantity > 1) {
-            const newProduct = {
-              ...productExists,
-              quantity: productExists.quantity - 1,
-            };
-            const newCartItems = cartItems.filter(
-              (item) => item._id !== newProduct._id
-            );
-            cartItems = [newProduct, ...newCartItems];
-          } else {
-            cartItems = cartItems.filter(
-              (item) => item._id !== productExists._id
-            );
-          }
-        }
-        return {
-          ...state,
-          cartItems,
-        };
-      }
-
-      return state;
     },
     removeProductFromCart: (state, action) => {
-      state.cartItems = state.cartItems.filter(item => item._id !== action.payload);
+      state.cartItems = state.cartItems.filter(
+        (item) => item._id !== action.payload
+      );
     },
     // state.cartItems = state.cartItems.filter(item => item._id !== action.payload);
     singleCheckout: (state, action) => {
-      console.log(action.payload)
       state.cartItems = [];
-      state.cartItems.push({ ...action.payload, quantity: 1 })
-    }
+      if(action.payload.stockQuantity){
+        state.cartItems.push({ ...action.payload, quantity: 1 });
+      }else{
+        toast.error("Not available!"!);
+      }
+    },
   },
 
 });

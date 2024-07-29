@@ -1,15 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { TProduct } from "../../../types";
 
-interface Product {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-  // Add other relevant product fields
-}
 
 interface FilterState {
-  products: Product[];
+  products: TProduct[];
 }
 
 const initialState: FilterState = {
@@ -30,13 +24,13 @@ const filterSlice = createSlice({
       switch (action.payload.type) {
         case "filterBySearch":
           state.products = [];
-          state.products = payloadProducts.filter((item) =>
+          state.products = payloadProducts.filter((item:TProduct) =>
             item.name.toLowerCase().includes(payloadText.toLowerCase())
           );
           break;
         case "filterByCategory":
           state.products = [];
-          state.products = payloadProducts.filter((item) =>
+          state.products = payloadProducts.filter((item:TProduct) =>
             item.category.toLowerCase().includes(payloadText.toLowerCase())
           );
           break;
@@ -45,22 +39,22 @@ const filterSlice = createSlice({
           switch (payloadText) {
             case "0-200":
               state.products = payloadProducts.filter(
-                (product) => product.price <= 200
+                (product:TProduct) => product.price <= 200
               );
               break;
             case "201-500":
               state.products = payloadProducts.filter(
-                (product) => product.price > 200 && product.price <= 500
+                (product:TProduct) => product.price > 200 && product.price <= 500
               );
               break;
             case "501-2000":
               state.products = payloadProducts.filter(
-                (product) => product.price > 500 && product.price <= 2000
+                (product:TProduct) => product.price > 500 && product.price <= 2000
               );
               break;
             case "2001-more":
               state.products = payloadProducts.filter(
-                (product) => product.price > 2000
+                (product:TProduct) => product.price > 2000
               );
               break;
 
