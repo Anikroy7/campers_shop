@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
-import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
 import "../../assets/css/Payments.css"
-import CheckoutForm from "./CheckoutFrom";
 import OutLayout from "../layouts/OutLayout";
 import { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../redux/hook";
+import { CheckoutForm } from "./CheckoutFrom";
+import useGetOrderInfo from "../../hooks/useGetOrderInfo";
 
 const stripePromise = loadStripe("pk_test_51PcVTyRoCwoYSOYV1HBzmZ0F9Re1F0693yyox4kk5CmN6oaQJreTZHXjQoqOFl8RonKCqcDQQanM8t1I9IDtqaNA00R8CKCzR6");
 
@@ -20,9 +21,11 @@ export default function Payments() {
   const navigate = useNavigate();
   const [clientSecret, setClientSecret] = useState("");
   const { cartItems } = useAppSelector((state) => state.cart);
+  const {totalPrice} = useGetOrderInfo('', clientSecret, cartItems);
+
   useEffect(() => {
     if (!cartItems.length) {
-      navigate("/");
+      navigate("/products");
     }
   }, [])
   useEffect(() => {
@@ -30,19 +33,19 @@ export default function Payments() {
     fetch("http://localhost:3000/api/products/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items: cartItems }),
+      body: JSON.stringify({  totalPrice }),
     })
       .then((res) => res.json())
       .then((data) => setClientSecret(data.clientSecret));
   }, []);
 
 
-  const appearance = {
-    theme: 'stripe',
-  };
-  const options = {
+  
+  const options:StripeElementsOptions = {
     clientSecret,
-    appearance,
+    appearance:{
+      theme:"stripe"
+    },
   };
 
 

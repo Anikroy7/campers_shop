@@ -1,13 +1,14 @@
+import { TOrderedUserInfo, TOrdrededProduct, TProduct } from "../types"
 
-const useGetOrderInfo = (userInfo = '', clientSecret, cartItems) => {
+const useGetOrderInfo = (userInfo:TOrderedUserInfo |'', clientSecret:string, cartItems:TProduct[]) => {
 
     let totalPrice = 0
-    const orderedProducts = []
+    const orderedProducts:TOrdrededProduct[] = []
 
    
     cartItems.map((item) => {
         orderedProducts.push({
-            id: item._id,
+            productId: item._id,
             quantity: item.quantity
         })
     })
@@ -20,7 +21,7 @@ const useGetOrderInfo = (userInfo = '', clientSecret, cartItems) => {
 
     }
 
-    return orderData
+    return {orderData, totalPrice}
 }
 
 

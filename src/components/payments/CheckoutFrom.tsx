@@ -8,18 +8,24 @@ import toast from "react-hot-toast";
 import useGetOrderInfo from "../../hooks/useGetOrderInfo";
 import { useAppSelector } from "../../redux/hook";
 import { useNavigate } from "react-router-dom";
+import { TOrderedUserInfo } from "../../types";
+import { StripePaymentElementOptions } from "@stripe/stripe-js";
 
-export default function CheckoutForm({ clientSecret, email, address, contactNo, name, setError }) {
+type CheckoutFormProps = {
+    clientSecret: string; email: string; address: string; contactNo: string; name: string; setError: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const CheckoutForm: React.FC<CheckoutFormProps> = ({ clientSecret, email, address, contactNo, name, setError }) => {
     const stripe = useStripe();
     const elements = useElements();
     const navigate = useNavigate()
     const cartItems = useAppSelector(state => state.cart.cartItems);
-    const [message, setMessage] = useState(null);
+    const [message, setMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const userInfo = { name, email, address, contactNo };
-    const orderData = useGetOrderInfo(userInfo, clientSecret, cartItems);
+    const userInfo: TOrderedUserInfo = { name, email, address, contactNo };
+    const {orderData} = useGetOrderInfo(userInfo, clientSecret, cartItems);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e:React.FormEvent) => {
         e.preventDefault();
         if (!stripe || !elements) {
             return;
@@ -28,6 +34,8 @@ export default function CheckoutForm({ clientSecret, email, address, contactNo, 
             setError(true);
             toast.error("All fields are required!!!");
             return;
+        }else{
+            setError(false)
         }
 
         setIsLoading(true);
@@ -45,9 +53,8 @@ export default function CheckoutForm({ clientSecret, email, address, contactNo, 
             redirect: "if_required",
         });
 
-        if (error) {
+        if (error?.message) {
             setMessage(error.message);
-            setError(true);
             toast.error(error.message);
         } else if (paymentIntent && paymentIntent.status === "succeeded") {
             console.log(paymentIntent)
@@ -56,7 +63,7 @@ export default function CheckoutForm({ clientSecret, email, address, contactNo, 
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ ...orderData, paymentIntent:paymentIntent.id, paymentMethod: paymentIntent.payment_method  }),
+                body: JSON.stringify({ ...orderData, paymentIntent: paymentIntent.id, paymentMethod: paymentIntent.payment_method }),
             }).then((res) => res.json()).then(data => {
                 console.log(data)
                 toast.success(data?.message)
@@ -68,7 +75,7 @@ export default function CheckoutForm({ clientSecret, email, address, contactNo, 
         setIsLoading(false);
     };
 
-    const paymentElementOptions = {
+    const paymentElementOptions:StripePaymentElementOptions = {
         layout: "tabs"
     };
 
