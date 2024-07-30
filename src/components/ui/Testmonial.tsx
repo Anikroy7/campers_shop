@@ -21,11 +21,11 @@ export default function Testmonial() {
                 <svg
                   className="w-8 opacity-25 text-indigo-500"
                   xmlns="http://www.w3.org/2000/svg"
-                  shape-rendering="geometricPrecision"
-                  text-rendering="geometricPrecision"
-                  image-rendering="optimizeQuality"
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  shapeRendering="geometricPrecision"
+                  textRendering="geometricPrecision"
+                  imageRendering="optimizeQuality"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   viewBox="0 0
                                                                                                              640 640"
                   fill="currentColor"
@@ -65,11 +65,11 @@ export default function Testmonial() {
                 <svg
                   className="w-8 opacity-25 text-indigo-500"
                   xmlns="http://www.w3.org/2000/svg"
-                  shape-rendering="geometricPrecision"
-                  text-rendering="geometricPrecision"
-                  image-rendering="optimizeQuality"
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  shapeRendering="geometricPrecision"
+                  textRendering="geometricPrecision"
+                  imageRendering="optimizeQuality"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   viewBox="0 0
                                                                                                              640 640"
                   fill="currentColor"

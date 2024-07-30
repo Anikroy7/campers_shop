@@ -19,7 +19,7 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
     <div className="slider-container">
       <Slider {...settings}>
         {images.map((image) => (
-          <div>
+          <div key={image}>
             <img
               src={image}
               alt="Product"

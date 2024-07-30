@@ -58,7 +58,7 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ clientSecret, email,
             toast.error(error.message);
         } else if (paymentIntent && paymentIntent.status === "succeeded") {
             console.log(paymentIntent)
-            fetch('http://localhost:3000/api/orders', {
+            fetch(`${import.meta.env.VITE_SEVER_URL}/api/orders`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

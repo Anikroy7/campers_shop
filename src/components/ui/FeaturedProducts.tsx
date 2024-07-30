@@ -11,7 +11,6 @@ export default function FeaturedProducts() {
   
   
   if (isLoading) return <Loading />
-  console.log( data, isLoading)
 
   return (
     <div className="bg-gray-100 text-gray-900 p-8">

@@ -8,7 +8,6 @@ export default function Navbar_two() {
     acc += curr.quantity;
     return acc;
   }, 0);
-console.log('console form nav var',cartItems)
   const navItems = (
     <>
       <li>

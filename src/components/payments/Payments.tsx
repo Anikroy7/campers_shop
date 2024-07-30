@@ -30,7 +30,7 @@ export default function Payments() {
   }, [])
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
-    fetch("http://localhost:3000/api/products/create-payment-intent", {
+    fetch(`${import.meta.env.VITE_SEVER_URL}/api/products/create-payment-intent`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({  totalPrice }),

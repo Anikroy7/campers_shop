@@ -9,7 +9,6 @@ import Category from "./components/ui/Category";
 
 function App() {
  
-  
   return (
     <>
       <Header />
