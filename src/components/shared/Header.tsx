@@ -61,7 +61,7 @@ export default function Header() {
         </div>
 
         <div className="video-container">
-          <video src="../src/assets/nav_video.mp4" autoPlay loop muted></video>
+          <video src="https://videos.pexels.com/video-files/5416827/5416827-hd_1920_1080_30fps.mp4" autoPlay loop muted></video>
         </div>
       </header>
     </>
