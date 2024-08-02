@@ -1,30 +1,93 @@
-# React + TypeScript + Vite
+# Campers Shop Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Live Link
 
-Currently, two official plugins are available:
+https://campers-shop-frontend-inky.vercel.app/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+## Introduction
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Campers Shop is your one-stop online store for all camping essentials and accessories. Whether you're planning a weekend getaway or an extended adventure, we offer a curated selection of products to enhance your outdoor experience.
 
-- Configure the top-level `parserOptions` property like this:
+## Project Description
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+Campers Shop is an e-commerce platform focused on delivering a seamless shopping experience for camping enthusiasts. Our goals are to provide a diverse range of high-quality camping gear, create an attractive and easy-to-use website, and build a community of outdoor lovers. By ensuring responsive design and integrating helpful features like product reviews and recommendations, Campers Shop aims to be the go-to destination for campers everywhere.
+
+
+## Features
+
+- Extensive Product Range: Discover a wide variety of camping gear and accessories.
+- Intuitive Navigation: Easily browse products with clear categories and search options.
+- Responsive Design: Shop on any device with a fully responsive website.
+- Product Reviews: Read customer reviews to make informed decisions.
+- Streamlined Checkout: Enjoy a quick and easy checkout process.
+
+
+## Technology Stack
+- React, Redux-toolkit, Redux-RTK query, Express js, Node.js, MongoDB, Mongoose etc.
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone  https://github.com/Anikroy7/campers_shop.git
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Go to the project directory
+
+```bash
+  cd campers_shop
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run dev
+```
+
+### Configuration
+
+1. Create a `.env` file in the root directory of the project.
+2. Add necessary configuration variables in the `.env` file.
+   Example:
+   ```bash
+    VITE_SEVER_URL=your_server_url
+    VITE_PAYMENT_SECRET= your_stripe_secret
+   ```
+## Usage
+
+```javascript
+import React from "react";
+import ReactDOM from "react-dom/client";
+
+import "./index.css";
+import { RouterProvider } from "react-router-dom";
+import router from "./routes/router.tsx";
+import { Provider } from "react-redux";
+import store from "./redux/store.ts";
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  </React.StrictMode>
+);
+
+```
+
+
+## Author
+
+ [@anikroy](https://github.com/Anikroy7)
+
+
+
+

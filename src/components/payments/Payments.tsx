@@ -10,7 +10,7 @@ import { useAppSelector } from "../../redux/hook";
 import { CheckoutForm } from "./CheckoutFrom";
 import useGetOrderInfo from "../../hooks/useGetOrderInfo";
 
-const stripePromise = loadStripe("pk_test_51PcVTyRoCwoYSOYV1HBzmZ0F9Re1F0693yyox4kk5CmN6oaQJreTZHXjQoqOFl8RonKCqcDQQanM8t1I9IDtqaNA00R8CKCzR6");
+const stripePromise = loadStripe(`${import.meta.env.VITE_PAYMENT_SECRET}`);
 
 export default function Payments() {
   const [name, setName] = useState('')
