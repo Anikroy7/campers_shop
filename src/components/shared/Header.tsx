@@ -47,16 +47,12 @@ export default function Header() {
           <section className="showcase">
             <h1>Curvy Road in Snow Covered Forest</h1>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
-              obcaecati, fuga amet esse quisquam dicta suscipit quasi officia
-              dolorum voluptas. Iste ab beatae quas modi!
+              At Campers' Haven, we believe that every outdoor adventure should be unforgettable. That's why we offer a wide range of high-quality camping gear and equipment to help you explore the great outdoors with ease and confidence.
             </p>
             <p>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eveniet
-              vitae perspiciatis blanditiis perferendis tenetur aut tempora
-              eaque, officiis hic nostrum?
+              Whether you're a seasoned backpacker or a weekend camper, we have everything you need to make your trip a success.
             </p>
-            <button style={{ border: "1px solid white" }}>See More</button>
+            <a href="#products"> <button style={{ border: "1px solid white" }}>See More</button></a>
           </section>
         </div>
 

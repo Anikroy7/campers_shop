@@ -43,7 +43,7 @@ export default function Products() {
   };
   return (
     <>
-      <div className="text-center pt-10">
+      <div className="text-center pt-10" id="products">
         <h1 className="text-3xl xl:text-4xl font-semibold leading-7 xl:leading-9 text-gray-800">
           Best Selling Products
         </h1>
